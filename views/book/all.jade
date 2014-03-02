@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   .clearfix
-    h1.pull-left Books in the Library
+    h1.pull-left= pageTitle
     .pull-right
       include partials/add-book
   each grouped_books in books

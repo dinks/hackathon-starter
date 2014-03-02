@@ -1,8 +1,11 @@
 var passport = require('passport');
 var _ = require('underscore');
+var validator = require('validator');
+
 var Imager = require('imager');
 var imagerConfig = require('../config/imager.js');
 var imager = new Imager(imagerConfig, 'Local');
+
 var redisTag   = require("redis-tag");
 var bookTagger = new redisTag.Taggable("book");
 var Book = require('../models/Book');
@@ -11,13 +14,25 @@ var Book = require('../models/Book');
  * Get All books
  */
 
-var getAllBooksAndRender = function(req, res) {
-  var perPage = 6,
-      perRow = 3,
-      page = req.param('page') > 1 ? req.param('page') : 1;
+var getBooksAndRender = function(req, res, options) {
+  var perPage = 6;
+  var perRow = 3;
+  var page = req.param('page') > 1 ? req.param('page') : 1;
+
+  var searchParams = {};
+
+  // Options could signify search results
+  if(options && options.ids) {
+    searchParams._id = options.ids;
+  }
+  options = _.defaults(options, {
+    title: 'Books',
+    pageTitle: 'Books in the Library',
+    renderView: 'book/all'
+  });
 
   Book
-    .find()
+    .find(searchParams)
     .limit(perPage)
     .skip(perPage * (page - 1))
     .sort({ _id: 'desc' })
@@ -30,9 +45,10 @@ var getAllBooksAndRender = function(req, res) {
         });
       });
 
-      Book.count().exec(function(err, count) {
-        res.render('book/all', {
-          title: 'Books',
+      Book.find(searchParams).count().exec(function(err, count) {
+        res.render(options.renderView, {
+          title: options.title,
+          pageTitle: options.pageTitle,
           books: _.toArray(_.groupBy(books, function(item, index){
                     return Math.floor(index / perRow);
                   })),
@@ -43,7 +59,7 @@ var getAllBooksAndRender = function(req, res) {
     });
 };
 
-exports.getBooks = getAllBooksAndRender;
+exports.getBooks = getBooksAndRender;
 
 exports.getBook = function(req, res) {
   var bookTags = [];
@@ -108,8 +124,19 @@ exports.postAddBook = function(req, res) {
         req.flash('success', { msg: 'Book Added!' });
       }
 
-      getAllBooksAndRender(req, res);
+      getBooksAndRender(req, res);
     });
   }, 'book');
+};
 
+exports.searchBook = function(req, res) {
+  var query = validator.escape(req.query.q);
+
+  bookTagger.find([ query ], function(ids) {
+    getBooksAndRender(req, res, {
+      ids: ids,
+      pageTitle: 'Search Results for ' + query,
+      title: 'Search results'
+    });
+  });
 };

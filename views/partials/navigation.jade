@@ -18,6 +18,8 @@
           a(href='/api') API Browser
         li(class=title=='Contact'?'active':undefined)
           a(href='/contact') Contact
+      if user
+        include book-search
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=title=='Login'?'active':undefined)
