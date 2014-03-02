@@ -17,6 +17,8 @@ block content
               p= 'published by - ' + book.publisher
               p= book.edition + ' Edition'
               p= book.year
+              - var tags=book.tags
+              include ../partials/tags
               p.text-right
                 a.btn.btn-success(href='#', role='button')
                   span.glyphicon.glyphicon-heart
@@ -24,7 +26,4 @@ block content
                 a.btn.btn-primary(href='#', role='button')
                   span.glyphicon.glyphicon-shopping-cart
                   |  Take
-                a.btn.btn-default(href='#', role='button')
-                  span.glyphicon.glyphicon-book
-                  |  Queue
   include ../partials/pagination

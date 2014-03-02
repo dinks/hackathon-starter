@@ -1,9 +1,7 @@
 var mongoose = require('mongoose');
 var imagerConfig = require('../config/imager.js');
-
-var convertToPublicPath = function(path) {
-  return imagerConfig.storage.Local.path.replace('public', '') + 'mini_' + path;
-};
+var redisTag   = require("redis-tag");
+var bookTagger = new redisTag.Taggable("book");
 
 var bookSchema = new mongoose.Schema({
   name: { type: String, required: true, index: true },
@@ -23,13 +21,13 @@ var resizeImagePath = function(object, type) {
 
 bookSchema
 .virtual('mini_picture')
-.get(function () {
+.get(function() {
   return resizeImagePath(this, 'mini_');
 });
 
 bookSchema
 .virtual('thumb_picture')
-.get(function () {
+.get(function() {
   return resizeImagePath(this, 'thumb_');
 });
 

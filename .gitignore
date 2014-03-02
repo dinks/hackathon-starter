@@ -23,5 +23,8 @@ node_modules
 Thumbs.db
 
 public/css/styles.css
+public/uploads/*.jpg
+public/uploads/*.jpeg
+public/uploads/*.png
 
 buildAssets

@@ -35,6 +35,10 @@ button.btn.btn-primary(data-toggle='modal', data-target='#books-modal')
             .col-sm-10
               input#year.form-control.bfh-number(data-min='1990', data-max='2050', type='text', name='year')
           .form-group
+            label.col-sm-2.control-label(for='tags') Tags
+            .col-sm-10
+              input#tags.form-control(placeholder='Press Enter to add', name='tags', data-role='tagsinput', data-tagClass='big')
+          .form-group
             .col-sm-offset-2.col-sm-10.text-right
               button.btn.btn-primary(type='submit') Add Book
       .modal-footer
