@@ -139,6 +139,7 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 
 app.get('/books', passportConf.isAuthenticated, bookController.getBooks);
 app.post('/books', passportConf.isAuthenticated, bookController.postAddBook);
+app.get('/book/:id', passportConf.isAuthenticated, bookController.getBook);
 
 /**
  * API

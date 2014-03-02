@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  .clearfix
+    h1.pull-left= book.name
+    include partials/book-options
+  .row
+    .col-md-3
+      img.img-rounded.img-responsive(src=book.mini_picture)
+    .col-md-9
+      p= 'by - ' + book.author
+      p= 'published by - ' + book.publisher
+      p= book.edition + ' Edition'
+      p= book.year
+      include ../partials/tags

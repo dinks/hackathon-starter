@@ -26,7 +26,7 @@ var getAllBooksAndRender = function(req, res) {
       // Must be a better way
       _.each(books, function(book) {
         bookTagger.get(book._id, function(tags) {
-          book.tags = tags.join(', ');
+          book.tags = tags;
         });
       });
 
@@ -44,6 +44,26 @@ var getAllBooksAndRender = function(req, res) {
 };
 
 exports.getBooks = getAllBooksAndRender;
+
+exports.getBook = function(req, res) {
+  var bookTags = [];
+  bookTagger.get(req.params.id, function(tags) {
+    bookTags = tags;
+  });
+
+  Book.findOne({ '_id': req.params.id }).exec(function(err, book) {
+    if(err) {
+      res.status(404);
+      res.render('404');
+    } else {
+      res.render('book/show', {
+        title: 'Details for ' + book.name,
+        book: book,
+        tags: bookTags
+      });
+    }
+  });
+};
 
 exports.postAddBook = function(req, res) {
   var book = new Book({

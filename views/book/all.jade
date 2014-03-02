@@ -11,19 +11,14 @@ block content
         .col-sm-6.col-md-4
           .thumbnail
             img(data-src='//holder.js/300x200', src=book.mini_picture)
-            .caption
-              h3= book.name
+            .caption.clearfix
+              h3
+                a(href='/book/'+book._id)=book.name
               p= 'by - ' + book.author
               p= 'published by - ' + book.publisher
               p= book.edition + ' Edition'
               p= book.year
               - var tags=book.tags
               include ../partials/tags
-              p.text-right
-                a.btn.btn-success(href='#', role='button')
-                  span.glyphicon.glyphicon-heart
-                  |  Fav
-                a.btn.btn-primary(href='#', role='button')
-                  span.glyphicon.glyphicon-shopping-cart
-                  |  Take
+              include partials/book-options
   include ../partials/pagination
