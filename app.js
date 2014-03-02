@@ -17,6 +17,7 @@ var connectAssets = require('connect-assets');
 
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
+var bookController = require('./controllers/book');
 var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var forgotController = require('./controllers/forgot');
@@ -28,6 +29,12 @@ var resetController = require('./controllers/reset');
 
 var secrets = require('./config/secrets');
 var passportConf = require('./config/passport');
+
+/**
+ * Helpers
+ */
+
+var helpers = require('view-helpers');
 
 /**
  * Create Express server.
@@ -75,9 +82,11 @@ app.use(express.session({
     auto_reconnect: true
   })
 }));
+// Upload must be before csrf check coz it has some probs!
+app.use(express.bodyParser());
 app.use(express.csrf());
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({ secret: "YIEUH8973nnHKJDHKJHHDJHSK" }));
 app.use(function(req, res, next) {
   res.locals.user = req.user;
   res.locals.token = req.csrfToken();
@@ -85,6 +94,15 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(flash());
+app.use(helpers('libbel')); // This module position should be inbetween these two
+
+// Set the CSRF Tokens
+app.use(function(req, res, next){
+  res.cookie('XSRF-TOKEN', req.csrfToken());
+  res.locals.token = req.csrfToken();
+  next();
+});
+
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 app.use(function(req, res) {
@@ -114,6 +132,18 @@ app.post('/account/profile', passportConf.isAuthenticated, userController.postUp
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
+
+/**
+ *  Books Section
+ */
+
+app.get('/books', passportConf.isAuthenticated, bookController.getBooks);
+app.post('/books', passportConf.isAuthenticated, bookController.postAddBook);
+
+/**
+ * API
+ */
+
 app.get('/api', apiController.getApi);
 app.get('/api/lastfm', apiController.getLastfm);
 app.get('/api/nyt', apiController.getNewYorkTimes);

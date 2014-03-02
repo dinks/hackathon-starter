@@ -1,0 +1,41 @@
+button.btn.btn-primary(data-toggle='modal', data-target='#books-modal')
+  span.glyphicon.glyphicon-plus
+  |  Add a Book
+#books-modal.modal.fade(tabindex='1', role='dialog', aria-labelledby='add-book', aria-hidden='true', data-backdrop='static')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal' aria-hidden='true') &times;
+        h4#add-book.modal-title Add a Book
+      .modal-body
+        form.form-horizontal(role='form', action='/books', method='post', enctype='multipart/form-data')
+          input(type='hidden', name='_csrf', value=token)
+          .form-group
+            label.col-sm-2.control-label(for='name') Name
+            .col-sm-10
+              input#name.form-control(placeholder='Name of the Book', name='name')
+          .form-group
+            label.col-sm-2.control-label(for='author') Author
+            .col-sm-10
+              input#author.form-control(placeholder='Name of the Author', name='author')
+          .form-group
+            label.col-sm-2.control-label(for='publisher') Publisher
+            .col-sm-10
+              input#publisher.form-control(placeholder='Name of the Publisher', name='publisher')
+          .form-group
+            label.col-sm-2.control-label(for='picture') Cover
+            .col-sm-10
+              input#picture(type='file', name='picture', accept='image/*')
+          .form-group
+            label.col-sm-2.control-label(for='edition') Edition
+            .col-sm-10
+              input#edition.form-control(placeholder='Edition Number', name='edition')
+          .form-group
+            label.col-sm-2.control-label(for='year') Year
+            .col-sm-10
+              input#year.form-control.bfh-number(data-min='1990', data-max='2050', type='text', name='year')
+          .form-group
+            .col-sm-offset-2.col-sm-10.text-right
+              button.btn.btn-primary(type='submit') Add Book
+      .modal-footer
+        button.btn.btn-default(type='button', data-dismiss='modal') Close

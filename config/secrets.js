@@ -31,32 +31,32 @@ module.exports = {
 
   facebookAuth: true,
   facebook: {
-    clientID: 'Your App ID',
-    clientSecret: 'Your App Secret',
+    clientID: process.env.FACEBOOK_CLIENT_ID,
+    clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     callbackURL: '/auth/facebook/callback',
     passReqToCallback: true
   },
 
   githubAuth: true,
   github: {
-    clientID: 'Your Client ID',
-    clientSecret: 'Your Client Secret',
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: '/auth/github/callback',
     passReqToCallback: true
   },
 
   twitterAuth: true,
   twitter: {
-    consumerKey: 'Your Consumer Key',
-    consumerSecret: 'Your Consumer Secret',
+    consumerKey: process.env.TWITTER_CLIENT_ID,
+    consumerSecret: process.env.TWITTER_CLIENT_SECRET,
     callbackURL: '/auth/twitter/callback',
     passReqToCallback: true
   },
 
   googleAuth: true,
   google: {
-    clientID: 'Your Client ID',
-    clientSecret: 'Your Client Secret',
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback',
     passReqToCallback: true
   },
